@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mr. Burger — Espace Staff</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body class="fade-in">
+  <main class="login-wrap">
+    <div class="login-card">
+      <h1 class="logo-mark" style="font-size:2rem;">Mr. <span>Burger</span></h1>
+      <p class="track-sub" style="text-align:center;margin-bottom:1.5rem;">Espace Staff & Direction</p>
+      <div class="champ"><label>Identifiant</label><input type="text" id="login" autocomplete="username" /></div>
+      <div class="champ"><label>Mot de passe</label><input type="password" id="mdp" autocomplete="current-password" /></div>
+      <p class="erreur" id="erreur"></p>
+      <button class="btn" id="btn-connexion" style="width:100%;">Se connecter</button>
+      <p class="track-sub" style="margin-top:1rem;text-align:center;font-size:.78rem;">Demo — staff/kitchen2024 · master/mrboss2024</p>
+    </div>
+  </main>
+
+  <script src="../js/core.js"></script>
+  <script src="../js/staff.js"></script>
+  <script>Staff.initLogin();</script>
+</body>
+</html>

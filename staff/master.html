@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mr. Burger — Hub Proprietaire</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <!-- Chart.js (CDN) — uniquement pour cette page -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body class="fade-in">
+  <header class="kds-header">
+    <h1 class="logo-mark" style="font-size:1.5rem;">Hub <span>Proprietaire</span></h1>
+    <button class="btn btn-ghost" id="deconnexion">Deconnexion</button>
+  </header>
+
+  <main class="master-wrap">
+    <!-- KPIs -->
+    <div class="cartes-kpi" id="kpis"></div>
+
+    <!-- Analytics multi-sites -->
+    <h2 class="titre">Analytics multi-sites</h2>
+    <div class="charts-grid">
+      <div class="chart-box"><h3 style="margin-bottom:.8rem;">Chiffre d'affaires : Brazzaville vs Lome</h3><canvas id="chart-ca"></canvas></div>
+      <div class="chart-box"><h3 style="margin-bottom:.8rem;">Ventes par categorie</h3><canvas id="chart-cat"></canvas></div>
+      <div class="chart-box"><h3 style="margin-bottom:.8rem;">Temps moyen de preparation</h3><canvas id="chart-temps"></canvas></div>
+    </div>
+
+    <!-- CRM Franchise -->
+    <h2 class="titre">CRM — Demandes de franchise</h2>
+    <div style="overflow-x:auto;">
+      <table class="table-crm">
+        <thead><tr><th>Nom</th><th>Ville</th><th>Budget</th><th>Experience</th><th>Date</th><th>Action</th></tr></thead>
+        <tbody id="crm-body"></tbody>
+      </table>
+    </div>
+  </main>
+
+  <script src="../js/core.js"></script>
+  <script src="../js/staff.js"></script>
+  <script>Staff.initMaster();</script>
+</body>
+</html>
