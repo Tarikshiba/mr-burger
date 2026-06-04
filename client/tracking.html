@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mr. Burger — Suivi de commande</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body class="fade-in">
+  <header class="topbar">
+    <a href="index.html" class="logo-mark">Mr. <span>Burger</span></a>
+    <a href="index.html" class="btn-ghost btn">Nouvelle commande</a>
+  </header>
+
+  <main class="track-wrap">
+    <h2 class="titre">Suivi en direct</h2>
+    <p class="track-sub">Commande <strong id="track-num">—</strong></p>
+
+    <div id="track-contenu" style="margin:1.2rem 0;"></div>
+
+    <!-- Jauge 4 etapes -->
+    <div class="track-etapes" id="track-etapes"></div>
+    <p class="track-sub" id="track-info"></p>
+  </main>
+
+  <script src="../js/core.js"></script>
+  <script src="../js/client.js"></script>
+  <script>
+    MrBurger.exigerVille();
+    Client.initTracking();
+  </script>
+</body>
+</html>

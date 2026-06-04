@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mr. Burger — Menu</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body class="fade-in">
+  <!-- Barre de navigation + panier -->
+  <header class="topbar">
+    <a href="index.html" class="logo-mark">Mr. <span>Burger</span></a>
+    <nav>
+      <a href="franchise.html">Devenir franchise</a>
+      <a href="tracking.html">Suivi</a>
+      <button class="panier-btn" id="ouvrir-checkout">
+        <span id="panier-icone">🛒</span> Panier
+        <span class="panier-count" id="panier-count">0</span>
+      </button>
+    </nav>
+  </header>
+
+  <!-- HERO VIDEO -->
+  <section class="hero">
+    <video autoplay muted loop playsinline poster="">
+      <source src="../assets/video/hero-bg.mp4" type="video/mp4" />
+    </video>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <h2>Toujours le meilleur</h2>
+      <p>Des burgers grilles avec passion, livres chez vous a <span id="hero-ville"></span>.</p>
+      <a href="#menu" class="btn" id="cta-commander">Commander maintenant</a>
+    </div>
+  </section>
+
+  <!-- MENU DYNAMIQUE (genere par client.js) -->
+  <main class="menu-section" id="menu"></main>
+
+  <script src="../js/core.js"></script>
+  <script src="../js/client.js"></script>
+  <script>
+    MrBurger.exigerVille();
+    document.getElementById('hero-ville').textContent = MrBurger.getVille() === 'brazza' ? 'Brazzaville' : 'Lome';
+    Client.initMenu();
+    Client.majPanierCount();
+    // Bouton panier -> checkout
+    document.getElementById('ouvrir-checkout').addEventListener('click', function () {
+      // 🔊 SON : click.mp3
+      MrBurger.jouerSon('click');
+      MrBurger.transitionVers('checkout.html');
+    });
+    document.getElementById('cta-commander').addEventListener('click', function () { MrBurger.jouerSon('click'); });
+    // Polling : reflete les ruptures de stock declenchees depuis le KDS
+    MrBurger.abonnerPolling(function () { Client.rafraichirRuptures(); });
+  </script>
+</body>
+</html>
