@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mr. Burger — Choisissez votre ville</title>
+  <!-- Google Fonts : Playfair Display (titres) + DM Sans (corps) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body class="page-ville fade-in">
+  <!-- Ecran d'accueil immersif : selection de la ville -->
+  <main class="ville-wrap">
+    <header class="ville-header">
+      <h1 class="logo-mark">Mr. <span>Burger</span></h1>
+      <p class="ville-tagline">Toujours le meilleur. Choisissez votre ville.</p>
+    </header>
+
+    <section class="ville-cards">
+      <!-- Carte Lome (Togo / XOF) -->
+      <button class="ville-card" data-ville="lome" data-devise="XOF" style="--carte-grad: linear-gradient(135deg,#038C3E33,#0D0D0D);">
+        <span class="ville-flag">🇹🇬</span>
+        <span class="ville-nom">Lome</span>
+        <span class="ville-pays">Togo · XOF</span>
+        <span class="ville-cta">Entrer →</span>
+      </button>
+
+      <!-- Carte Brazzaville (Congo / XAF) -->
+      <button class="ville-card" data-ville="brazza" data-devise="XAF" style="--carte-grad: linear-gradient(135deg,#F2B70533,#0D0D0D);">
+        <span class="ville-flag">🇨🇬</span>
+        <span class="ville-nom">Brazzaville</span>
+        <span class="ville-pays">Congo · XAF</span>
+        <span class="ville-cta">Entrer →</span>
+      </button>
+    </section>
+
+    <footer class="ville-footer">© Mr. Burger — Prototype de demonstration</footer>
+  </main>
+
+  <script src="js/core.js"></script>
+  <script>
+    // Selection de la ville : ecrit ville + devise dans le localStorage puis transition fluide
+    document.querySelectorAll('.ville-card').forEach(function (carte) {
+      carte.addEventListener('click', function () {
+        // 🔊 SON : click.mp3
+        MrBurger.jouerSon('click');
+        var ville = carte.getAttribute('data-ville');
+        var devise = carte.getAttribute('data-devise');
+        localStorage.setItem('ville', ville);
+        localStorage.setItem('devise', devise);
+        // Transition en fondu avant redirection (aucun flash blanc)
+        MrBurger.transitionVers('client/index.html');
+      });
+    });
+  </script>
+</body>
+</html>

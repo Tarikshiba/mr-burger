@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mr. Burger — Commande</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body class="fade-in">
+  <header class="topbar">
+    <a href="index.html" class="logo-mark">Mr. <span>Burger</span></a>
+    <a href="index.html" class="btn-ghost btn">← Retour au menu</a>
+  </header>
+
+  <main class="tunnel">
+    <!-- Barre de progression 3 etapes -->
+    <div class="steps">
+      <div class="step actif" data-step="1">1 · Recapitulatif</div>
+      <div class="step" data-step="2">2 · Coordonnees</div>
+      <div class="step" data-step="3">3 · Paiement</div>
+    </div>
+
+    <!-- Etape 1 : Recapitulatif -->
+    <section class="panneau actif" data-panneau="1">
+      <h2 class="titre">Votre commande</h2>
+      <div id="recap-articles"></div>
+      <div class="recap-total"><span>Total</span><span id="recap-total">0</span></div>
+      <h3 class="titre" style="margin:1.5rem 0 .8rem;font-size:1.2rem;">Mode de service</h3>
+      <div class="radio-cards">
+        <div class="radio-card actif" data-mode="livraison">🛵 Livraison</div>
+        <div class="radio-card" data-mode="surplace">🍽️ Sur place</div>
+      </div>
+      <div class="tunnel-nav">
+        <span></span>
+        <button class="btn" id="vers-2">Continuer →</button>
+      </div>
+    </section>
+
+    <!-- Etape 2 : Coordonnees -->
+    <section class="panneau" data-panneau="2">
+      <h2 class="titre">Vos coordonnees</h2>
+      <div class="champ"><label>Prenom</label><input type="text" id="c-prenom" placeholder="Votre prenom" /></div>
+      <div class="champ"><label>Numero de telephone</label><input type="tel" id="c-tel" placeholder="+228 / +242 ..." /></div>
+      <div class="champ" id="champ-adresse"><label>Adresse de livraison</label><input type="text" id="c-adresse" placeholder="Quartier, rue, repere" /></div>
+      <div class="tunnel-nav">
+        <button class="btn btn-ghost" id="retour-1">← Retour</button>
+        <button class="btn" id="vers-3">Continuer →</button>
+      </div>
+    </section>
+
+    <!-- Etape 3 : Paiement Mobile Money simule -->
+    <section class="panneau" data-panneau="3">
+      <h2 class="titre">Paiement Mobile Money</h2>
+      <div class="champ"><label>Operateur</label><select id="c-operateur"></select></div>
+      <div class="champ"><label>Numero Mobile Money</label><input type="tel" id="c-momo" placeholder="Numero a debiter" /></div>
+      <div id="zone-paiement">
+        <button class="btn btn-vert" id="payer" style="width:100%;">Payer <span id="btn-montant"></span></button>
+      </div>
+      <div id="zone-spinner" style="display:none;text-align:center;">
+        <div class="spinner"></div>
+        <p>Traitement du paiement securise...</p>
+      </div>
+    </section>
+  </main>
+
+  <script src="../js/core.js"></script>
+  <script src="../js/client.js"></script>
+  <script>
+    MrBurger.exigerVille();
+    Client.initCheckout();
+  </script>
+</body>
+</html>

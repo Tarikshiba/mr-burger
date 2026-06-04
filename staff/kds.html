@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mr. Burger — KDS Cuisine</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body class="fade-in">
+  <header class="kds-header">
+    <h1 class="logo-mark" style="font-size:1.5rem;">KDS — Cuisine</h1>
+    <nav style="display:flex;gap:1rem;">
+      <a href="dispatch.html" class="btn btn-ghost">Dispatch</a>
+      <button class="btn btn-ghost" id="deconnexion">Deconnexion</button>
+    </nav>
+  </header>
+
+  <h2 class="titre" style="padding:1.2rem 1.5rem 0;">Commandes en cours</h2>
+  <div class="kds-grid" id="kds-grid"></div>
+
+  <h2 class="titre" style="padding:0 1.5rem;">Ruptures de stock</h2>
+  <p class="track-sub" style="padding:0 1.5rem .6rem;">Cliquez pour basculer la disponibilite (refletee en direct cote client).</p>
+  <div class="rupture-grid" id="rupture-grid"></div>
+
+  <script src="../js/core.js"></script>
+  <script src="../js/staff.js"></script>
+  <script>Staff.initKDS();</script>
+</body>
+</html>
