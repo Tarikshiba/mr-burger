@@ -8,22 +8,186 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    body { background: var(--noir-profond); }
+
+    .kds-header {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1rem 2rem;
+      background: rgba(13,13,13,.8);
+      backdrop-filter: var(--blur); -webkit-backdrop-filter: var(--blur);
+      border-bottom: 1px solid var(--bordure);
+      position: sticky; top: 0; z-index: 40;
+    }
+    .kds-header h1 { font-size: 1.4rem; }
+    .kds-header nav { display: flex; gap: .8rem; align-items: center; }
+
+    /* Compteur de commandes */
+    .kds-compteur {
+      display: flex; align-items: center; gap: .6rem;
+      padding: .5rem 1rem;
+      background: var(--surface);
+      border: 1px solid var(--bordure);
+      border-radius: 999px;
+      font-size: .9rem; font-weight: 600;
+    }
+    .kds-compteur-dot {
+      width: 10px; height: 10px; border-radius: 50%;
+      background: var(--vert);
+      box-shadow: 0 0 8px var(--vert-glow);
+      animation: pulseGlow 2s ease infinite;
+    }
+
+    .kds-section-title {
+      padding: 1.5rem 2rem .5rem;
+      font-size: 1.1rem;
+      color: var(--gris-clair);
+      font-weight: 600;
+    }
+
+    /* Grille KDS — fiches Kanban premium */
+    .kds-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1.2rem; padding: 1rem 2rem 2rem;
+    }
+
+    .kds-fiche {
+      background: var(--surface);
+      border: 1px solid var(--bordure);
+      border-radius: var(--rayon);
+      padding: 1.5rem;
+      position: relative;
+      overflow: hidden;
+      transition: border-color var(--transition), box-shadow var(--transition);
+    }
+    .kds-fiche:hover { border-color: var(--bordure-hover); box-shadow: var(--ombre); }
+
+    /* Barre de progression en haut de la fiche */
+    .kds-fiche-progress {
+      position: absolute; top: 0; left: 0; right: 0; height: 4px;
+      background: var(--surface-elevated);
+      border-radius: 4px 4px 0 0;
+      overflow: hidden;
+    }
+    .kds-fiche-progress-fill {
+      height: 100%; border-radius: inherit;
+      transition: width .5s ease, background .5s ease;
+    }
+    .kds-fiche-progress-fill.vert { background: var(--vert); width: 30%; }
+    .kds-fiche-progress-fill.orange { background: #f59e0b; width: 65%; }
+    .kds-fiche-progress-fill.rouge { background: var(--rouge); width: 100%; }
+
+    .kds-fiche-header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: .8rem;
+    }
+    .kds-fiche h3 { font-size: 1.4rem; color: var(--or); }
+    .kds-fiche-meta {
+      color: var(--gris); font-size: .82rem;
+      display: flex; align-items: center; gap: .5rem;
+    }
+    .kds-fiche-mode {
+      background: rgba(255,255,255,.05);
+      border: 1px solid var(--bordure);
+      border-radius: 999px;
+      padding: .2rem .6rem;
+      font-size: .75rem; font-weight: 600;
+    }
+
+    .kds-articles { list-style: none; margin: .8rem 0; }
+    .kds-articles li {
+      padding: .5rem 0;
+      border-bottom: 1px solid var(--bordure);
+      font-size: 1rem;
+      display: flex; justify-content: space-between;
+    }
+
+    .kds-timer-wrap {
+      display: flex; align-items: center; justify-content: space-between;
+      margin: 1rem 0;
+    }
+    .kds-timer { font-weight: 700; font-size: 1.8rem; margin: 0; }
+
+    .kds-fiche .btn {
+      width: 100%; padding: 1rem; font-size: 1rem;
+      margin-top: .5rem;
+    }
+
+    /* --- Module Ruptures repense en style Kanban --- */
+    .rupture-section {
+      padding: 0 2rem 2rem;
+    }
+    .rupture-section-title {
+      font-size: 1.1rem; font-weight: 600;
+      color: var(--gris-clair);
+      margin-bottom: .5rem;
+    }
+    .rupture-section-desc {
+      color: var(--gris); font-size: .85rem;
+      margin-bottom: 1rem;
+    }
+    .rupture-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: .7rem; padding: 0;
+    }
+    .rupture-item {
+      background: var(--surface);
+      border: 1px solid var(--bordure);
+      border-radius: 12px;
+      padding: .8rem 1rem;
+      cursor: pointer;
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: .88rem; font-weight: 500;
+      transition: all var(--transition);
+    }
+    .rupture-item:hover { background: var(--surface-elevated); border-color: var(--bordure-hover); }
+    .rupture-item.off {
+      border-color: var(--rouge); color: var(--rouge);
+      background: rgba(191,4,4,.06);
+      box-shadow: 0 2px 10px var(--rouge-glow);
+    }
+    .rupture-badge {
+      font-size: .7rem; font-weight: 700;
+      padding: .2rem .5rem; border-radius: 999px;
+      text-transform: uppercase;
+    }
+    .rupture-item:not(.off) .rupture-badge {
+      background: rgba(3,140,62,.15); color: var(--vert);
+    }
+    .rupture-item.off .rupture-badge {
+      background: rgba(191,4,4,.15); color: var(--rouge);
+    }
+
+    @media (max-width: 768px) {
+      .kds-grid { grid-template-columns: 1fr; padding: 1rem; }
+      .kds-header { padding: .8rem 1rem; }
+      .rupture-section { padding: 0 1rem 2rem; }
+    }
+  </style>
 </head>
 <body class="fade-in">
   <header class="kds-header">
-    <h1 class="logo-mark" style="font-size:1.5rem;">KDS — Cuisine</h1>
-    <nav style="display:flex;gap:1rem;">
+    <h1 class="logo-mark" style="font-size:1.4rem;">KDS — <span>Cuisine</span></h1>
+    <nav>
+      <div class="kds-compteur">
+        <span class="kds-compteur-dot"></span>
+        <span id="kds-count">0 en cours</span>
+      </div>
       <a href="dispatch.html" class="btn btn-ghost">Dispatch</a>
-      <button class="btn btn-ghost" id="deconnexion">Deconnexion</button>
+      <button class="btn btn-ghost" id="deconnexion">Déconnexion</button>
     </nav>
   </header>
 
-  <h2 class="titre" style="padding:1.2rem 1.5rem 0;">Commandes en cours</h2>
+  <p class="kds-section-title">Commandes en cours</p>
   <div class="kds-grid" id="kds-grid"></div>
 
-  <h2 class="titre" style="padding:0 1.5rem;">Ruptures de stock</h2>
-  <p class="track-sub" style="padding:0 1.5rem .6rem;">Cliquez pour basculer la disponibilite (refletee en direct cote client).</p>
-  <div class="rupture-grid" id="rupture-grid"></div>
+  <div class="rupture-section">
+    <p class="rupture-section-title">Ruptures de stock</p>
+    <p class="rupture-section-desc">Cliquez pour basculer la disponibilité (reflétée en direct côté client).</p>
+    <div class="rupture-grid" id="rupture-grid"></div>
+  </div>
 
   <script src="../js/core.js"></script>
   <script src="../js/staff.js"></script>

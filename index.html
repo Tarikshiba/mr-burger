@@ -4,14 +4,143 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Mr. Burger — Choisissez votre ville</title>
-  <!-- Google Fonts : Playfair Display (titres) + DM Sans (corps) -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .page-ville {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 2rem 1.5rem;
+      background: var(--noir-profond);
+      position: relative;
+      overflow-y: auto;
+    }
+    .page-ville::before {
+      content: '';
+      position: fixed; inset: 0;
+      background:
+        radial-gradient(ellipse at 25% 50%, rgba(3,140,62,.04) 0%, transparent 50%),
+        radial-gradient(ellipse at 75% 50%, rgba(242,183,5,.04) 0%, transparent 50%);
+      pointer-events: none;
+    }
+
+    .ville-wrap {
+      position: relative; z-index: 1;
+      width: 100%; max-width: 900px;
+      text-align: center;
+    }
+
+    .ville-header { margin-bottom: 2.5rem; }
+    .ville-header .logo-mark {
+      font-size: clamp(2.8rem, 6vw, 4.5rem);
+      letter-spacing: -1px;
+    }
+    .ville-tagline {
+      font-size: 1.1rem;
+      color: var(--gris);
+      margin-top: .8rem;
+    }
+
+    .ville-cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.8rem;
+    }
+
+    .ville-card {
+      position: relative;
+      background: var(--surface);
+      border: 1px solid var(--bordure);
+      border-radius: var(--rayon-lg);
+      padding: 3rem 2rem 2.5rem;
+      display: flex; flex-direction: column; align-items: center; gap: .6rem;
+      overflow: hidden;
+      transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+      box-shadow: var(--ombre);
+      animation: cardReveal .6s cubic-bezier(.4,0,.2,1) both;
+    }
+    .ville-card:nth-child(2) { animation-delay: .1s; }
+
+    @keyframes cardReveal {
+      from { opacity: 0; transform: translateY(20px) scale(.97); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* Lueur au hover */
+    .ville-card::before {
+      content: ''; position: absolute; inset: 0;
+      border-radius: inherit; opacity: 0;
+      transition: opacity .4s ease;
+      pointer-events: none;
+    }
+    .ville-card[data-ville="lome"]::before {
+      background: radial-gradient(ellipse at 50% 90%, rgba(3,140,62,.1) 0%, transparent 60%);
+    }
+    .ville-card[data-ville="brazza"]::before {
+      background: radial-gradient(ellipse at 50% 90%, rgba(242,183,5,.1) 0%, transparent 60%);
+    }
+    .ville-card:hover { transform: translateY(-4px) scale(1.02); box-shadow: var(--ombre-elevated); border-color: var(--bordure-hover); }
+    .ville-card:hover::before { opacity: 1; }
+
+    .ville-flag {
+      width: 72px; height: 72px; border-radius: 50%;
+      overflow: hidden; position: relative;
+      margin-bottom: .5rem;
+      box-shadow: 0 4px 20px rgba(0,0,0,.4);
+      border: 2px solid var(--bordure-hover);
+    }
+    .ville-flag img {
+      width: 100%; height: 100%; object-fit: cover;
+    }
+
+    .ville-nom {
+      font-family: var(--font-titre);
+      font-size: 2rem;
+      position: relative;
+    }
+    .ville-pays {
+      color: var(--gris);
+      font-size: .95rem;
+      position: relative;
+    }
+    .ville-cta {
+      margin-top: 1.2rem;
+      padding: .75rem 1.8rem;
+      border-radius: 999px;
+      font-weight: 600; font-size: .95rem;
+      position: relative;
+      color: var(--or);
+      border: 1px solid rgba(242,183,5,.25);
+      background: rgba(242,183,5,.05);
+      transition: all var(--transition);
+    }
+    .ville-card:hover .ville-cta {
+      background: var(--or);
+      color: #1a1300;
+      box-shadow: 0 4px 16px var(--or-glow);
+      border-color: var(--or);
+    }
+
+    .ville-footer {
+      margin-top: 3rem;
+      color: #3a3a3a;
+      font-size: .82rem;
+    }
+
+    @media (max-width: 640px) {
+      .page-ville { padding: 2rem 1rem; align-items: flex-start; padding-top: 3rem; }
+      .ville-cards { grid-template-columns: 1fr; gap: 1.2rem; }
+      .ville-card { padding: 2.5rem 1.5rem 2rem; }
+      .ville-nom { font-size: 1.7rem; }
+      .ville-flag { width: 56px; height: 56px; }
+    }
+  </style>
 </head>
 <body class="page-ville fade-in">
-  <!-- Ecran d'accueil immersif : selection de la ville -->
   <main class="ville-wrap">
     <header class="ville-header">
       <h1 class="logo-mark">Mr. <span>Burger</span></h1>
@@ -20,28 +149,27 @@
 
     <section class="ville-cards">
       <!-- Carte Lome (Togo / XOF) -->
-      <button class="ville-card" data-ville="lome" data-devise="XOF" style="--carte-grad: linear-gradient(135deg,#038C3E33,#0D0D0D);">
-        <span class="ville-flag">🇹🇬</span>
-        <span class="ville-nom">Lome</span>
+      <button class="ville-card" data-ville="lome" data-devise="XOF">
+        <span class="ville-flag"><img src="assets/images/flag-tg.png" alt="Drapeau Togo" /></span>
+        <span class="ville-nom">Lomé</span>
         <span class="ville-pays">Togo · XOF</span>
         <span class="ville-cta">Entrer →</span>
       </button>
 
       <!-- Carte Brazzaville (Congo / XAF) -->
-      <button class="ville-card" data-ville="brazza" data-devise="XAF" style="--carte-grad: linear-gradient(135deg,#F2B70533,#0D0D0D);">
-        <span class="ville-flag">🇨🇬</span>
+      <button class="ville-card" data-ville="brazza" data-devise="XAF">
+        <span class="ville-flag"><img src="assets/images/flag-cg.png" alt="Drapeau Congo" /></span>
         <span class="ville-nom">Brazzaville</span>
         <span class="ville-pays">Congo · XAF</span>
         <span class="ville-cta">Entrer →</span>
       </button>
     </section>
 
-    <footer class="ville-footer">© Mr. Burger — Prototype de demonstration</footer>
+    <footer class="ville-footer">© Mr. Burger — Prototype de démonstration</footer>
   </main>
 
   <script src="js/core.js"></script>
   <script>
-    // Selection de la ville : ecrit ville + devise dans le localStorage puis transition fluide
     document.querySelectorAll('.ville-card').forEach(function (carte) {
       carte.addEventListener('click', function () {
         // 🔊 SON : click.mp3
@@ -50,7 +178,6 @@
         var devise = carte.getAttribute('data-devise');
         localStorage.setItem('ville', ville);
         localStorage.setItem('devise', devise);
-        // Transition en fondu avant redirection (aucun flash blanc)
         MrBurger.transitionVers('client/index.html');
       });
     });

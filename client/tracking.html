@@ -8,22 +8,211 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../css/style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+  <style>
+    .track-wrap {
+      max-width: 640px;
+      padding-top: 2.5rem;
+    }
+
+    .track-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .track-header h2 {
+      font-size: 1.8rem;
+      margin-bottom: .5rem;
+    }
+    .track-num-badge {
+      display: inline-block;
+      background: var(--or-subtle);
+      border: 1px solid rgba(242,183,5,.2);
+      color: var(--or);
+      font-weight: 700;
+      font-size: 1.1rem;
+      padding: .5rem 1.2rem;
+      border-radius: 999px;
+    }
+
+    /* Timeline premium */
+    .track-etapes {
+      margin: 2.5rem 0;
+      padding-left: .5rem;
+    }
+    .track-etape {
+      padding-bottom: 2.2rem;
+    }
+    .track-puce {
+      width: 44px; height: 44px;
+      font-size: 1rem;
+    }
+    .track-etape.atteinte .track-puce {
+      box-shadow: 0 4px 16px var(--vert-glow);
+    }
+
+    /* Barre de progression horizontale lumineuse */
+    .track-progress-bar {
+      width: 100%;
+      height: 6px;
+      background: var(--surface);
+      border-radius: 3px;
+      margin: 2rem 0;
+      overflow: hidden;
+      border: 1px solid var(--bordure);
+    }
+    .track-progress-fill {
+      height: 100%;
+      border-radius: 3px;
+      background: linear-gradient(90deg, var(--vert), var(--or));
+      transition: width .6s cubic-bezier(.4,0,.2,1);
+      box-shadow: 0 0 12px var(--or-glow);
+    }
+
+    /* Recap commande */
+    .track-recap {
+      background: var(--surface);
+      border: 1px solid var(--bordure);
+      border-radius: var(--rayon);
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .track-status-text {
+      text-align: center;
+      margin-top: 1.5rem;
+      padding: 1rem;
+      background: var(--surface);
+      border: 1px solid var(--bordure);
+      border-radius: 12px;
+    }
+    .track-status-text .status-label {
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: var(--or);
+      margin-bottom: .3rem;
+    }
+    .track-status-text .status-sub {
+      color: var(--gris);
+      font-size: .85rem;
+    }
+
+    /* QR Code section */
+    .qr-section {
+      text-align: center;
+      padding: 2rem;
+      background: var(--surface);
+      border: 1px solid var(--bordure);
+      border-radius: var(--rayon);
+      margin: 1.5rem 0;
+    }
+    .qr-section h3 {
+      font-family: var(--font-titre);
+      font-size: 1.2rem;
+      margin-bottom: .4rem;
+    }
+    .qr-section p {
+      color: var(--gris); font-size: .88rem;
+      margin-bottom: 1.2rem;
+    }
+    .qr-canvas {
+      display: inline-block;
+      padding: 1rem;
+      background: #fff;
+      border-radius: 12px;
+      margin-bottom: 1rem;
+    }
+    .qr-operateur {
+      display: inline-block;
+      padding: .4rem 1rem;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: .85rem;
+      margin-top: .5rem;
+    }
+
+    /* Bouton telecharger recu */
+    .btn-recu {
+      display: inline-flex; align-items: center; gap: .5rem;
+      margin-top: 1rem;
+      padding: .8rem 1.5rem;
+      border-radius: 999px;
+      background: rgba(255,255,255,.05);
+      border: 1px solid var(--bordure);
+      color: var(--blanc);
+      font-weight: 600; font-size: .9rem;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+    .btn-recu:hover {
+      background: rgba(255,255,255,.1);
+      border-color: var(--bordure-hover);
+    }
+
+    /* Ecran Bon Appetit */
+    .bon-appetit {
+      text-align: center;
+      padding: 3rem 1rem 1rem;
+      animation: bonAppetitIn .6s cubic-bezier(.4,0,.2,1) both;
+    }
+    .bon-appetit-icone {
+      font-size: 5rem;
+      margin-bottom: 1rem;
+      animation: bounce 1s ease infinite;
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-12px); }
+    }
+    .bon-appetit h2 {
+      font-size: 2.2rem;
+      margin-bottom: .5rem;
+      background: linear-gradient(135deg, var(--or), #e0a800);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .bon-appetit p {
+      color: var(--gris); font-size: 1.05rem;
+    }
+    @keyframes bonAppetitIn {
+      from { opacity: 0; transform: scale(.9) translateY(20px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+  </style>
 </head>
 <body class="fade-in">
   <header class="topbar">
     <a href="index.html" class="logo-mark">Mr. <span>Burger</span></a>
-    <a href="index.html" class="btn-ghost btn">Nouvelle commande</a>
+    <a href="index.html" class="btn-ghost btn">← Menu</a>
   </header>
 
   <main class="track-wrap">
-    <h2 class="titre">Suivi en direct</h2>
-    <p class="track-sub">Commande <strong id="track-num">—</strong></p>
+    <div class="track-header">
+      <h2 class="titre">Suivi en direct</h2>
+      <span class="track-num-badge" id="track-num">—</span>
+    </div>
 
-    <div id="track-contenu" style="margin:1.2rem 0;"></div>
+    <!-- Barre de progression lumineuse -->
+    <div class="track-progress-bar">
+      <div class="track-progress-fill" id="track-progress" style="width:0%;"></div>
+    </div>
 
-    <!-- Jauge 4 etapes -->
+    <!-- Timeline 4 etapes -->
     <div class="track-etapes" id="track-etapes"></div>
-    <p class="track-sub" id="track-info"></p>
+
+    <!-- Statut courant -->
+    <div class="track-status-text" id="track-status-box">
+      <div class="status-label" id="track-status-label">—</div>
+      <div class="status-sub" id="track-info">Mise à jour automatique toutes les 2 secondes.</div>
+    </div>
+
+    <!-- Actions visibles quand la commande est terminee -->
+    <div id="track-actions" style="display:none; margin-top:1.5rem; gap:1rem; justify-content:center; flex-wrap:wrap;">
+      <a href="index.html" class="btn">← Retour au menu</a>
+      <a href="index.html" class="btn btn-ghost">Nouvelle commande</a>
+    </div>
+
+    <!-- Recap commande -->
+    <div class="track-recap" id="track-contenu"></div>
   </main>
 
   <script src="../js/core.js"></script>

@@ -8,31 +8,166 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    /* --- Checkout specifique --- */
+    .checkout-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .checkout-header h2 {
+      font-size: 1.8rem;
+      margin-bottom: .3rem;
+    }
+
+    /* Ligne recap avec controles quantite */
+    .recap-item {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--bordure);
+      gap: 1rem;
+    }
+    .recap-item-info {
+      flex: 1;
+      font-size: 1rem;
+    }
+    .recap-item-nom { font-weight: 600; }
+    .recap-item-prix { color: var(--or); font-size: .9rem; margin-top: .2rem; }
+
+    .recap-item-controls {
+      display: flex; align-items: center; gap: .6rem;
+    }
+    .qty-btn {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: var(--surface-elevated); border: 1px solid var(--bordure);
+      color: var(--blanc); font-size: 1.2rem; font-weight: 700;
+      display: grid; place-items: center;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+    .qty-btn:hover { background: rgba(255,255,255,.08); border-color: var(--bordure-hover); }
+    .qty-btn.suppr { color: var(--rouge); border-color: rgba(191,4,4,.3); }
+    .qty-btn.suppr:hover { background: rgba(191,4,4,.1); }
+    .qty-val {
+      font-weight: 700; font-size: 1.1rem;
+      min-width: 24px; text-align: center;
+    }
+
+    /* Mode de service — grands boutons */
+    .mode-cards {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;
+      margin: 1.2rem 0;
+    }
+    .mode-card {
+      border: 1px solid var(--bordure); border-radius: var(--rayon);
+      padding: 1.5rem 1rem; background: var(--surface);
+      cursor: pointer; text-align: center;
+      transition: all var(--transition);
+      display: flex; flex-direction: column; align-items: center; gap: .4rem;
+    }
+    .mode-card:hover { border-color: var(--bordure-hover); background: var(--surface-elevated); }
+    .mode-card.actif {
+      border-color: var(--or); background: var(--or-subtle);
+      box-shadow: 0 0 0 1px var(--or) inset, 0 4px 16px var(--or-glow);
+    }
+    .mode-card-icone { font-size: 2rem; }
+    .mode-card-label { font-weight: 700; font-size: 1.05rem; }
+    .mode-card-desc { color: var(--gris); font-size: .8rem; }
+
+    /* Operateurs MoMo — grands boutons visuels */
+    .operateurs-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;
+      margin: 1.2rem 0;
+    }
+    .operateur-card {
+      border: 1px solid var(--bordure); border-radius: var(--rayon);
+      padding: 1.4rem 1rem; background: var(--surface);
+      cursor: pointer; text-align: center;
+      transition: all var(--transition);
+      display: flex; flex-direction: column; align-items: center; gap: .3rem;
+    }
+    .operateur-card:hover { border-color: var(--bordure-hover); background: var(--surface-elevated); }
+    .operateur-card.actif {
+      border-color: var(--or); background: var(--or-subtle);
+      box-shadow: 0 0 0 1px var(--or) inset, 0 4px 16px var(--or-glow);
+    }
+    .operateur-card-nom { font-weight: 700; font-size: 1.1rem; }
+    .operateur-card-color { width: 40px; height: 6px; border-radius: 3px; margin-bottom: .3rem; }
+
+    /* Modale confirmation */
+    .confirm-overlay {
+      position: fixed; inset: 0; z-index: 900;
+      background: rgba(0,0,0,.65);
+      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+      display: flex; align-items: center; justify-content: center;
+      padding: 1.5rem;
+      opacity: 0; pointer-events: none;
+      transition: opacity .25s ease;
+    }
+    .confirm-overlay.ouverte { opacity: 1; pointer-events: all; }
+    .confirm-card {
+      background: var(--surface);
+      border: 1px solid var(--bordure); border-radius: var(--rayon-lg);
+      padding: 2.5rem 2rem; text-align: center;
+      max-width: 380px; width: 100%;
+      box-shadow: var(--ombre-elevated);
+      transform: translateY(20px) scale(.96);
+      transition: transform .3s cubic-bezier(.4,0,.2,1);
+    }
+    .confirm-overlay.ouverte .confirm-card { transform: translateY(0) scale(1); }
+    .confirm-card h3 { font-family: var(--font-titre); font-size: 1.4rem; margin-bottom: .5rem; }
+    .confirm-card p { color: var(--gris); margin-bottom: 2rem; font-size: .95rem; }
+    .confirm-actions { display: flex; gap: .8rem; }
+    .confirm-actions .btn { flex: 1; padding: 1rem; }
+
+    /* Panier vide */
+    .panier-vide {
+      text-align: center; padding: 4rem 2rem;
+    }
+    .panier-vide-icone { font-size: 4rem; margin-bottom: 1rem; opacity: .5; }
+    .panier-vide p { color: var(--gris); margin-bottom: 1.5rem; }
+
+    @media (max-width: 480px) {
+      .mode-cards, .operateurs-grid { grid-template-columns: 1fr; }
+      .recap-item { flex-wrap: wrap; }
+    }
+  </style>
 </head>
 <body class="fade-in">
   <header class="topbar">
     <a href="index.html" class="logo-mark">Mr. <span>Burger</span></a>
-    <a href="index.html" class="btn-ghost btn">← Retour au menu</a>
+    <a href="index.html" class="btn-ghost btn">← Menu</a>
   </header>
 
   <main class="tunnel">
-    <!-- Barre de progression 3 etapes -->
+    <!-- Barre de progression -->
     <div class="steps">
-      <div class="step actif" data-step="1">1 · Recapitulatif</div>
-      <div class="step" data-step="2">2 · Coordonnees</div>
+      <div class="step actif" data-step="1">1 · Panier</div>
+      <div class="step" data-step="2">2 · Coordonnées</div>
       <div class="step" data-step="3">3 · Paiement</div>
     </div>
 
-    <!-- Etape 1 : Recapitulatif -->
+    <!-- Etape 1 : Recapitulatif panier editable -->
     <section class="panneau actif" data-panneau="1">
-      <h2 class="titre">Votre commande</h2>
+      <div class="checkout-header">
+        <h2 class="titre">Votre panier</h2>
+      </div>
       <div id="recap-articles"></div>
       <div class="recap-total"><span>Total</span><span id="recap-total">0</span></div>
-      <h3 class="titre" style="margin:1.5rem 0 .8rem;font-size:1.2rem;">Mode de service</h3>
-      <div class="radio-cards">
-        <div class="radio-card actif" data-mode="livraison">🛵 Livraison</div>
-        <div class="radio-card" data-mode="surplace">🍽️ Sur place</div>
+
+      <h3 class="titre" style="font-size:1.1rem; margin-bottom:.8rem;">Mode de service</h3>
+      <div class="mode-cards">
+        <div class="mode-card actif" data-mode="livraison">
+          <span class="mode-card-icone">🛵</span>
+          <span class="mode-card-label">Livraison</span>
+          <span class="mode-card-desc">A votre adresse</span>
+        </div>
+        <div class="mode-card" data-mode="surplace">
+          <span class="mode-card-icone">🍽️</span>
+          <span class="mode-card-label">Sur place</span>
+          <span class="mode-card-desc">Au comptoir</span>
+        </div>
       </div>
+
       <div class="tunnel-nav">
         <span></span>
         <button class="btn" id="vers-2">Continuer →</button>
@@ -41,30 +176,72 @@
 
     <!-- Etape 2 : Coordonnees -->
     <section class="panneau" data-panneau="2">
-      <h2 class="titre">Vos coordonnees</h2>
-      <div class="champ"><label>Prenom</label><input type="text" id="c-prenom" placeholder="Votre prenom" /></div>
-      <div class="champ"><label>Numero de telephone</label><input type="tel" id="c-tel" placeholder="+228 / +242 ..." /></div>
-      <div class="champ" id="champ-adresse"><label>Adresse de livraison</label><input type="text" id="c-adresse" placeholder="Quartier, rue, repere" /></div>
+      <div class="checkout-header">
+        <h2 class="titre">Vos coordonnées</h2>
+      </div>
+      <div class="champ"><label>Prénom</label><input type="text" id="c-prenom" placeholder="Votre prénom" /></div>
+      <div class="champ"><label>Numéro de téléphone</label><input type="tel" id="c-tel" placeholder="+228 / +242 ..." /></div>
+      <div class="champ" id="champ-adresse"><label>Adresse de livraison</label><input type="text" id="c-adresse" placeholder="Quartier, rue, repère" /></div>
+      <div class="champ" id="champ-table" style="display:none;"><label>Numéro de table <span style="color:var(--gris);font-weight:400;">(optionnel)</span></label><input type="text" id="c-table" placeholder="Ex : 5" /></div>
       <div class="tunnel-nav">
         <button class="btn btn-ghost" id="retour-1">← Retour</button>
         <button class="btn" id="vers-3">Continuer →</button>
       </div>
     </section>
 
-    <!-- Etape 3 : Paiement Mobile Money simule -->
+    <!-- Etape 3 : Mode de paiement -->
     <section class="panneau" data-panneau="3">
-      <h2 class="titre">Paiement Mobile Money</h2>
-      <div class="champ"><label>Operateur</label><select id="c-operateur"></select></div>
-      <div class="champ"><label>Numero Mobile Money</label><input type="tel" id="c-momo" placeholder="Numero a debiter" /></div>
-      <div id="zone-paiement">
-        <button class="btn btn-vert" id="payer" style="width:100%;">Payer <span id="btn-montant"></span></button>
+      <div class="checkout-header">
+        <h2 class="titre">Paiement</h2>
       </div>
-      <div id="zone-spinner" style="display:none;text-align:center;">
+
+      <label style="font-weight:600; display:block; margin-bottom:.8rem; color:var(--gris-clair);">Comment souhaitez-vous payer ?</label>
+      <div class="mode-cards" id="mode-paiement-cards">
+        <div class="mode-card actif" data-paiement="momo">
+          <span class="mode-card-icone">📱</span>
+          <span class="mode-card-label">Mobile Money</span>
+          <span class="mode-card-desc">Paiement immédiat</span>
+        </div>
+        <div class="mode-card" data-paiement="comptoir">
+          <span class="mode-card-icone">💵</span>
+          <span class="mode-card-label">Au comptoir</span>
+          <span class="mode-card-desc">Payer à la récupération</span>
+        </div>
+      </div>
+
+      <!-- Zone Mobile Money -->
+      <div id="zone-momo">
+        <label style="font-weight:600; display:block; margin:1.5rem 0 .6rem; color:var(--gris-clair);">Choisissez votre opérateur</label>
+        <div class="operateurs-grid" id="operateurs-grid"></div>
+        <div class="champ" style="margin-top:1.5rem;">
+          <label>Numéro Mobile Money</label>
+          <input type="tel" id="c-momo" placeholder="Numéro à débiter" />
+        </div>
+      </div>
+
+      <div id="zone-paiement">
+        <button class="btn btn-vert" id="payer" style="width:100%; padding:1.2rem; font-size:1.1rem;">
+          Payer <span id="btn-montant"></span>
+        </button>
+      </div>
+      <div id="zone-spinner" style="display:none; text-align:center;">
         <div class="spinner"></div>
-        <p>Traitement du paiement securise...</p>
+        <p style="color:var(--gris);">Traitement du paiement sécurisé...</p>
       </div>
     </section>
   </main>
+
+  <!-- Modale de confirmation -->
+  <div class="confirm-overlay" id="confirm-overlay">
+    <div class="confirm-card">
+      <h3>Confirmer la commande ?</h3>
+      <p>Votre compte sera débité de <strong id="confirm-montant">0</strong></p>
+      <div class="confirm-actions">
+        <button class="btn btn-ghost" id="confirm-annuler">Annuler</button>
+        <button class="btn btn-vert" id="confirm-oui">Confirmer</button>
+      </div>
+    </div>
+  </div>
 
   <script src="../js/core.js"></script>
   <script src="../js/client.js"></script>

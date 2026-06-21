@@ -8,6 +8,106 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    .franchise-intro {
+      text-align: center;
+      padding: 2rem 0 1rem;
+    }
+    .franchise-intro h2 {
+      font-size: clamp(1.8rem, 4vw, 2.4rem);
+      margin-bottom: .5rem;
+    }
+    .franchise-intro p {
+      color: var(--gris);
+      font-size: 1.05rem;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    /* Steps plus larges */
+    .steps { margin-top: 1rem; }
+
+    /* Budget cards visuels */
+    .budget-cards {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+    .budget-card {
+      border: 1px solid var(--bordure); border-radius: var(--rayon);
+      padding: 1.4rem 1.5rem; background: var(--surface);
+      cursor: pointer; text-align: left;
+      transition: all var(--transition);
+      display: flex; align-items: center; gap: 1rem;
+    }
+    .budget-card:hover { border-color: var(--bordure-hover); background: var(--surface-elevated); }
+    .budget-card.actif {
+      border-color: var(--or); background: var(--or-subtle);
+      box-shadow: 0 0 0 1px var(--or) inset, 0 4px 16px var(--or-glow);
+    }
+    .budget-card-icone {
+      width: 48px; height: 48px; border-radius: 50%;
+      display: grid; place-items: center;
+      background: var(--surface-elevated);
+      border: 1px solid var(--bordure);
+      font-size: .9rem; font-weight: 700; color: var(--or);
+      flex-shrink: 0;
+    }
+    .budget-card.actif .budget-card-icone {
+      background: var(--or); border-color: var(--or); color: #1a1300;
+    }
+    .budget-card-content { flex: 1; }
+    .budget-card-label { font-weight: 700; font-size: 1.05rem; }
+    .budget-card-desc { color: var(--gris); font-size: .82rem; margin-top: .2rem; }
+
+    /* Badge Fort Potentiel inline */
+    .badge-potentiel {
+      display: none;
+      background: linear-gradient(135deg, var(--or), #e0a800);
+      color: #1a1300; font-weight: 700;
+      padding: .2rem .6rem; border-radius: 999px; font-size: .7rem;
+      box-shadow: 0 2px 8px var(--or-glow);
+      text-transform: uppercase; margin-left: .5rem;
+      animation: fadeIn .3s ease both;
+    }
+    .badge-potentiel.visible { display: inline-block; }
+
+    /* Experience cards */
+    .exp-cards {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;
+    }
+    .exp-card {
+      border: 1px solid var(--bordure); border-radius: var(--rayon);
+      padding: 1.4rem 1rem; background: var(--surface);
+      cursor: pointer; text-align: center;
+      transition: all var(--transition);
+      display: flex; flex-direction: column; align-items: center; gap: .4rem;
+    }
+    .exp-card:hover { border-color: var(--bordure-hover); background: var(--surface-elevated); }
+    .exp-card.actif {
+      border-color: var(--or); background: var(--or-subtle);
+      box-shadow: 0 0 0 1px var(--or) inset, 0 4px 16px var(--or-glow);
+    }
+    .exp-card-icone { font-size: 2rem; }
+    .exp-card-label { font-weight: 700; }
+
+    /* Succes final */
+    .franchise-succes {
+      display: none; text-align: center; padding: 3rem 1rem;
+      animation: fadeIn .4s ease both;
+    }
+    .franchise-succes.visible { display: block; }
+    .franchise-succes-icone { font-size: 4rem; margin-bottom: 1rem; }
+    .franchise-succes h3 {
+      font-family: var(--font-titre);
+      font-size: 1.6rem; margin-bottom: .5rem;
+    }
+    .franchise-succes p { color: var(--gris); margin-bottom: 1.5rem; }
+
+    @media (max-width: 480px) {
+      .exp-cards { grid-template-columns: 1fr; }
+    }
+  </style>
 </head>
 <body class="fade-in">
   <header class="topbar">
@@ -16,59 +116,93 @@
   </header>
 
   <main class="tunnel">
-    <h2 class="titre" style="text-align:center;">Rejoignez l'aventure Mr. Burger</h2>
-    <p class="track-sub" style="text-align:center;margin-bottom:1.5rem;">Ouvrez votre franchise a Brazzaville ou Lome.</p>
+    <div class="franchise-intro">
+      <h2 class="titre">Rejoignez l'aventure Mr. Burger</h2>
+      <p>Ouvrez votre franchise à Brazzaville, Lomé ou ailleurs.</p>
+    </div>
 
     <div class="steps">
       <div class="step actif" data-step="1">1 · Profil</div>
       <div class="step" data-step="2">2 · Projet</div>
-      <div class="step" data-step="3">3 · Capacite</div>
-      <div class="step" data-step="4">4 · Experience</div>
+      <div class="step" data-step="3">3 · Capacité</div>
+      <div class="step" data-step="4">4 · Expérience</div>
     </div>
 
-    <!-- Etape 1 : Presentation -->
+    <!-- Etape 1 : Profil -->
     <section class="panneau actif" data-panneau="1">
-      <div class="champ"><label>Prenom</label><input type="text" id="f-prenom" /></div>
-      <div class="champ"><label>Nom</label><input type="text" id="f-nom" /></div>
-      <div class="champ"><label>Email</label><input type="email" id="f-email" /></div>
-      <div class="champ"><label>Telephone WhatsApp</label><input type="tel" id="f-whatsapp" placeholder="Format international, ex: 22890000000" /></div>
+      <div class="champ"><label>Prénom</label><input type="text" id="f-prenom" placeholder="Votre prénom" /></div>
+      <div class="champ"><label>Nom</label><input type="text" id="f-nom" placeholder="Votre nom" /></div>
+      <div class="champ"><label>Email</label><input type="email" id="f-email" placeholder="email@exemple.com" /></div>
+      <div class="champ"><label>Téléphone WhatsApp</label><input type="tel" id="f-whatsapp" placeholder="Format international, ex: 22890000000" /></div>
       <div class="tunnel-nav"><span></span><button class="btn" data-next="2">Continuer →</button></div>
     </section>
 
     <!-- Etape 2 : Projet -->
     <section class="panneau" data-panneau="2">
-      <div class="champ"><label>Ville ciblee</label>
+      <div class="champ"><label>Ville ciblée</label>
         <select id="f-ville">
           <option value="Brazzaville">Brazzaville</option>
-          <option value="Lome">Lome</option>
-          <option value="autre">Autre (preciser)</option>
+          <option value="Lome">Lomé</option>
+          <option value="autre">Autre (préciser)</option>
         </select>
       </div>
-      <div class="champ" id="champ-ville-libre" style="display:none;"><label>Precisez la ville</label><input type="text" id="f-ville-libre" /></div>
-      <div class="champ"><label>Superficie envisagee (m2)</label><input type="number" id="f-superficie" placeholder="ex: 120" /></div>
+      <div class="champ" id="champ-ville-libre" style="display:none;"><label>Précisez la ville</label><input type="text" id="f-ville-libre" placeholder="Nom de la ville" /></div>
+      <div class="champ"><label>Superficie envisagée (m²)</label><input type="number" id="f-superficie" placeholder="Ex : 120" /></div>
       <div class="tunnel-nav"><button class="btn btn-ghost" data-prev="1">← Retour</button><button class="btn" data-next="3">Continuer →</button></div>
     </section>
 
-    <!-- Etape 3 : Capacite -->
+    <!-- Etape 3 : Capacite (budget) -->
     <section class="panneau" data-panneau="3">
-      <label style="font-weight:600;display:block;margin-bottom:.6rem;">Budget d'investissement disponible</label>
-      <div class="radio-cards" style="grid-template-columns:1fr;">
-        <div class="radio-card" data-budget="<10M">Moins de 10 000 000 FCFA</div>
-        <div class="radio-card" data-budget="10-25M">10 000 000 – 25 000 000 FCFA</div>
-        <div class="radio-card" data-budget=">25M">Plus de 25 000 000 FCFA</div>
+      <label style="font-weight:600; display:block; margin-bottom:1rem; font-size:1.05rem;">Budget d'investissement disponible <span class="badge-potentiel" id="badge-potentiel">Fort Potentiel</span></label>
+      <div class="budget-cards">
+        <div class="budget-card" data-budget="<10M">
+          <div class="budget-card-icone">$</div>
+          <div class="budget-card-content">
+            <div class="budget-card-label">Moins de 10 000 000 FCFA</div>
+            <div class="budget-card-desc">Budget d'entrée pour un format compact</div>
+          </div>
+        </div>
+        <div class="budget-card" data-budget="10-25M">
+          <div class="budget-card-icone">$$</div>
+          <div class="budget-card-content">
+            <div class="budget-card-label">10 000 000 – 25 000 000 FCFA</div>
+            <div class="budget-card-desc">Format standard avec salle</div>
+          </div>
+        </div>
+        <div class="budget-card" data-budget=">25M">
+          <div class="budget-card-icone">$$$</div>
+          <div class="budget-card-content">
+            <div class="budget-card-label">Plus de 25 000 000 FCFA</div>
+            <div class="budget-card-desc">Format premium, emplacement stratégique</div>
+          </div>
+        </div>
       </div>
       <div class="tunnel-nav"><button class="btn btn-ghost" data-prev="2">← Retour</button><button class="btn" data-next="4">Continuer →</button></div>
     </section>
 
     <!-- Etape 4 : Experience -->
     <section class="panneau" data-panneau="4">
-      <label style="font-weight:600;display:block;margin-bottom:.6rem;">Experience en restauration ?</label>
-      <div class="radio-cards">
-        <div class="radio-card actif" data-exp="non">Non</div>
-        <div class="radio-card" data-exp="oui">Oui</div>
+      <label style="font-weight:600; display:block; margin-bottom:1rem; font-size:1.05rem;">Expérience en restauration ?</label>
+      <div class="exp-cards">
+        <div class="exp-card actif" data-exp="non">
+          <span class="exp-card-icone">🆕</span>
+          <span class="exp-card-label">Non</span>
+        </div>
+        <div class="exp-card" data-exp="oui">
+          <span class="exp-card-icone">👨‍🍳</span>
+          <span class="exp-card-label">Oui</span>
+        </div>
       </div>
-      <div class="champ" id="champ-exp-detail" style="display:none;margin-top:1rem;"><label>Detaillez votre experience</label><textarea id="f-exp-detail" rows="3"></textarea></div>
+      <div class="champ" id="champ-exp-detail" style="display:none; margin-top:1.2rem;"><label>Détaillez votre expérience</label><textarea id="f-exp-detail" rows="3" placeholder="Type de restaurant, durée, rôle..."></textarea></div>
       <div class="tunnel-nav"><button class="btn btn-ghost" data-prev="3">← Retour</button><button class="btn btn-vert" id="f-soumettre">Soumettre ma demande</button></div>
+    </section>
+
+    <!-- Ecran de succes -->
+    <section class="franchise-succes" id="franchise-succes">
+      <div class="franchise-succes-icone">🎉</div>
+      <h3>Demande envoyée !</h3>
+      <p>Notre équipe vous recontactera très prochainement pour discuter de votre projet.</p>
+      <a href="index.html" class="btn">Retour au menu</a>
     </section>
   </main>
 

@@ -8,17 +8,93 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    .login-wrap {
+      background:
+        radial-gradient(ellipse at 50% 30%, rgba(242,183,5,.03) 0%, transparent 50%),
+        var(--noir-profond);
+    }
+
+    .login-card {
+      text-align: center;
+      animation: cardReveal .5s cubic-bezier(.4,0,.2,1) both;
+    }
+    @keyframes cardReveal {
+      from { opacity: 0; transform: translateY(20px) scale(.97); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .login-card .logo-mark {
+      font-size: 2.2rem;
+      margin-bottom: .4rem;
+    }
+
+    .login-subtitle {
+      color: var(--gris);
+      font-size: .95rem;
+      margin-bottom: 2.2rem;
+    }
+
+    .login-card .champ {
+      text-align: left;
+      margin-bottom: 1.4rem;
+    }
+    .login-card .champ input {
+      padding: 1.1rem 1.3rem;
+      font-size: 1.05rem;
+      border-radius: 14px;
+      width: 100%;
+    }
+
+    .login-card .btn {
+      width: 100%;
+      padding: 1.15rem;
+      font-size: 1.1rem;
+      margin-top: .5rem;
+    }
+    .login-card .btn:active {
+      transform: scale(.96);
+    }
+
+    .login-hint {
+      margin-top: 1.8rem;
+      padding-top: 1.2rem;
+      border-top: 1px solid var(--bordure);
+      color: var(--gris);
+      font-size: .78rem;
+      line-height: 1.6;
+    }
+    .login-hint code {
+      background: rgba(255,255,255,.05);
+      padding: .15rem .4rem;
+      border-radius: 4px;
+      font-size: .75rem;
+      color: var(--gris-clair);
+    }
+  </style>
 </head>
 <body class="fade-in">
   <main class="login-wrap">
     <div class="login-card">
-      <h1 class="logo-mark" style="font-size:2rem;">Mr. <span>Burger</span></h1>
-      <p class="track-sub" style="text-align:center;margin-bottom:1.5rem;">Espace Staff & Direction</p>
-      <div class="champ"><label>Identifiant</label><input type="text" id="login" autocomplete="username" /></div>
-      <div class="champ"><label>Mot de passe</label><input type="password" id="mdp" autocomplete="current-password" /></div>
+      <h1 class="logo-mark">Mr. <span>Burger</span></h1>
+      <p class="login-subtitle">Espace Staff & Direction</p>
+
+      <div class="champ">
+        <label>Identifiant</label>
+        <input type="text" id="login" autocomplete="username" placeholder="Votre identifiant" />
+      </div>
+      <div class="champ">
+        <label>Mot de passe</label>
+        <input type="password" id="mdp" autocomplete="current-password" placeholder="••••••••" />
+      </div>
+
       <p class="erreur" id="erreur"></p>
-      <button class="btn" id="btn-connexion" style="width:100%;">Se connecter</button>
-      <p class="track-sub" style="margin-top:1rem;text-align:center;font-size:.78rem;">Demo — staff/kitchen2024 · master/mrboss2024</p>
+
+      <button class="btn" id="btn-connexion">Se connecter</button>
+
+      <div class="login-hint">
+        Demo — <code>staff</code> / <code>kitchen2024</code> · <code>master</code> / <code>mrboss2024</code>
+      </div>
     </div>
   </main>
 

@@ -8,13 +8,111 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    /* --- Layout Kiosk --- */
+    body { padding-bottom: 100px; }
+
+    /* Hero reduit pour laisser place au menu */
+    .hero {
+      height: 50vh; min-height: 340px;
+    }
+
+    /* --- Onglets categories (sticky sous la topbar) --- */
+    .cat-tabs {
+      position: sticky; top: 60px; z-index: 40;
+      display: flex; gap: .6rem;
+      padding: 1rem 2rem;
+      background: rgba(13,13,13,.8);
+      backdrop-filter: var(--blur);
+      -webkit-backdrop-filter: var(--blur);
+      border-bottom: 1px solid var(--bordure);
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .cat-tabs::-webkit-scrollbar { display: none; }
+    .cat-tab {
+      flex-shrink: 0;
+      padding: .75rem 1.5rem;
+      border-radius: 999px;
+      font-weight: 600; font-size: .95rem;
+      background: var(--surface);
+      border: 1px solid var(--bordure);
+      color: var(--gris);
+      cursor: pointer;
+      transition: all var(--transition);
+      white-space: nowrap;
+    }
+    .cat-tab:hover { background: var(--surface-elevated); border-color: var(--bordure-hover); color: var(--blanc); }
+    .cat-tab.actif {
+      background: var(--or); color: #1a1300; border-color: var(--or);
+      box-shadow: 0 4px 16px var(--or-glow);
+    }
+
+    /* --- Grille menu kiosk --- */
+    .menu-section { max-width: 1320px; padding: 2rem 1.5rem 1rem; }
+    .menu-cat-titre {
+      font-size: 1.6rem; margin: 2rem 0 1.2rem;
+    }
+    .menu-grid {
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1.2rem;
+    }
+
+    /* Carte article kiosk : plus grande, plus tactile */
+    .carte-article { border-radius: var(--rayon); }
+    .carte-photo { height: 150px; }
+    .carte-body { padding: 1rem 1.1rem 1.1rem; }
+    .carte-actions .btn { padding: .8rem 1rem; font-size: .9rem; }
+
+    /* --- Footer panier fixe (style kiosk) --- */
+    .panier-footer {
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 50;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem 2rem;
+      background: rgba(18,18,18,.92);
+      backdrop-filter: var(--blur);
+      -webkit-backdrop-filter: var(--blur);
+      border-top: 1px solid var(--bordure);
+      box-shadow: 0 -8px 32px rgba(0,0,0,.4);
+      transform: translateY(100%);
+      transition: transform .35s cubic-bezier(.4,0,.2,1);
+    }
+    .panier-footer.visible { transform: translateY(0); }
+    .panier-footer-info {
+      display: flex; align-items: center; gap: 1rem;
+    }
+    .panier-footer-count {
+      background: var(--or); color: #1a1300;
+      width: 40px; height: 40px; border-radius: 50%;
+      display: grid; place-items: center;
+      font-weight: 700; font-size: 1.1rem;
+    }
+    .panier-footer-detail {
+      display: flex; flex-direction: column;
+    }
+    .panier-footer-label { font-size: .85rem; color: var(--gris); }
+    .panier-footer-total { font-size: 1.2rem; font-weight: 700; color: var(--or); }
+    .panier-footer .btn {
+      padding: 1rem 2.2rem; font-size: 1.05rem;
+    }
+
+    /* --- Responsive --- */
+    @media (max-width: 768px) {
+      .cat-tabs { padding: .8rem 1rem; gap: .5rem; }
+      .cat-tab { padding: .65rem 1.1rem; font-size: .85rem; }
+      .menu-section { padding: 1.5rem 1rem 1rem; }
+      .menu-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 1rem; }
+      .panier-footer { padding: .8rem 1.2rem; }
+      .panier-footer .btn { padding: .85rem 1.5rem; font-size: .95rem; }
+      .hero { height: 40vh; min-height: 260px; }
+    }
+  </style>
 </head>
 <body class="fade-in">
-  <!-- Barre de navigation + panier -->
+  <!-- Barre de navigation -->
   <header class="topbar">
     <a href="index.html" class="logo-mark">Mr. <span>Burger</span></a>
     <nav>
-      <a href="franchise.html">Devenir franchise</a>
+      <a href="franchise.html">Franchise</a>
       <a href="tracking.html">Suivi</a>
       <button class="panier-btn" id="ouvrir-checkout">
         <span id="panier-icone">🛒</span> Panier
@@ -23,7 +121,7 @@
     </nav>
   </header>
 
-  <!-- HERO VIDEO -->
+  <!-- HERO VIDEO (reduit) -->
   <section class="hero">
     <video autoplay muted loop playsinline poster="">
       <source src="../assets/video/hero-bg.mp4" type="video/mp4" />
@@ -31,29 +129,101 @@
     <div class="hero-overlay"></div>
     <div class="hero-content">
       <h2>Toujours le meilleur</h2>
-      <p>Des burgers grilles avec passion, livres chez vous a <span id="hero-ville"></span>.</p>
-      <a href="#menu" class="btn" id="cta-commander">Commander maintenant</a>
+      <p>Des burgers grillés avec passion, livrés chez vous à <span id="hero-ville"></span>.</p>
+      <a href="#menu-zone" class="btn" id="cta-commander">Commander maintenant</a>
     </div>
   </section>
 
-  <!-- MENU DYNAMIQUE (genere par client.js) -->
-  <main class="menu-section" id="menu"></main>
+  <!-- ONGLETS CATEGORIES -->
+  <nav class="cat-tabs" id="cat-tabs"></nav>
+
+  <!-- MENU DYNAMIQUE -->
+  <main class="menu-section" id="menu" aria-label="menu-zone"></main>
+  <div id="menu-zone"></div>
+
+  <!-- MODALE COMBO -->
+  <div class="modale-overlay" id="modale-combo">
+    <div class="modale" style="position:relative;">
+      <button class="modale-fermer" id="modale-fermer">&times;</button>
+      <!-- Etape 1 : choix seul ou combo -->
+      <div id="combo-etape-1">
+        <h3 class="modale-titre" id="modale-nom-article">Burger</h3>
+        <p class="modale-sous-titre">Comment souhaitez-vous le prendre ?</p>
+        <div class="modale-choix">
+          <div class="modale-option" id="choix-seul">
+            <span class="modale-option-icone">🍔</span>
+            <span class="modale-option-label">Burger seul</span>
+            <span class="modale-option-prix" id="prix-seul">3 500 XOF</span>
+          </div>
+          <div class="modale-option highlight" id="choix-combo">
+            <span class="modale-option-icone">🍔🍟🥤</span>
+            <span class="modale-option-label">Formule Combo</span>
+            <span class="modale-option-prix" id="prix-combo">+2 000</span>
+            <span class="modale-option-desc">Frites + Boisson + Coleslaw</span>
+          </div>
+        </div>
+      </div>
+      <!-- Etape 2 : personnalisation combo -->
+      <div class="modale-sous-etape" id="combo-etape-2">
+        <h3 class="modale-titre">Personnalisez votre Combo</h3>
+        <p class="modale-sous-titre">Choisissez vos accompagnements</p>
+        <div class="modale-select-group">
+          <label>Accompagnement</label>
+          <select id="combo-accomp">
+            <option value="Frites classiques">Frites classiques</option>
+            <option value="Frites fromage">Frites fromage</option>
+            <option value="Potatoes">Potatoes</option>
+          </select>
+        </div>
+        <div class="modale-select-group">
+          <label>Boisson</label>
+          <select id="combo-boisson">
+            <option value="Coca-Cola">Coca-Cola</option>
+            <option value="Fanta Orange">Fanta Orange</option>
+            <option value="Sprite">Sprite</option>
+            <option value="Eau minerale">Eau minérale</option>
+            <option value="Jus de fruits">Jus de fruits</option>
+          </select>
+        </div>
+        <div class="modale-actions">
+          <button class="btn btn-ghost" id="combo-retour">← Retour</button>
+          <button class="btn" id="combo-valider">Ajouter au panier</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER PANIER FIXE -->
+  <div class="panier-footer" id="panier-footer">
+    <div class="panier-footer-info">
+      <div class="panier-footer-count" id="footer-count">0</div>
+      <div class="panier-footer-detail">
+        <span class="panier-footer-label">Mon panier</span>
+        <span class="panier-footer-total" id="footer-total">0 XOF</span>
+      </div>
+    </div>
+    <button class="btn" id="footer-checkout">Finaliser ma commande →</button>
+  </div>
 
   <script src="../js/core.js"></script>
   <script src="../js/client.js"></script>
   <script>
     MrBurger.exigerVille();
-    document.getElementById('hero-ville').textContent = MrBurger.getVille() === 'brazza' ? 'Brazzaville' : 'Lome';
+    document.getElementById('hero-ville').textContent = MrBurger.getVille() === 'brazza' ? 'Brazzaville' : 'Lomé';
     Client.initMenu();
     Client.majPanierCount();
-    // Bouton panier -> checkout
+    // Bouton panier topbar -> checkout
     document.getElementById('ouvrir-checkout').addEventListener('click', function () {
-      // 🔊 SON : click.mp3
+      MrBurger.jouerSon('click');
+      MrBurger.transitionVers('checkout.html');
+    });
+    // Bouton footer -> checkout
+    document.getElementById('footer-checkout').addEventListener('click', function () {
       MrBurger.jouerSon('click');
       MrBurger.transitionVers('checkout.html');
     });
     document.getElementById('cta-commander').addEventListener('click', function () { MrBurger.jouerSon('click'); });
-    // Polling : reflete les ruptures de stock declenchees depuis le KDS
+    // Polling : ruptures de stock
     MrBurger.abonnerPolling(function () { Client.rafraichirRuptures(); });
   </script>
 </body>

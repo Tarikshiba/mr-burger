@@ -8,18 +8,132 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    body { background: var(--noir-profond); }
+
+    .dispatch-header {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1rem 2rem;
+      background: rgba(13,13,13,.8);
+      backdrop-filter: var(--blur); -webkit-backdrop-filter: var(--blur);
+      border-bottom: 1px solid var(--bordure);
+      position: sticky; top: 0; z-index: 40;
+    }
+    .dispatch-header h1 { font-size: 1.4rem; }
+    .dispatch-header nav { display: flex; gap: .8rem; align-items: center; }
+
+    .dispatch-compteur {
+      display: flex; align-items: center; gap: .6rem;
+      padding: .5rem 1rem;
+      background: var(--surface);
+      border: 1px solid var(--bordure);
+      border-radius: 999px;
+      font-size: .9rem; font-weight: 600;
+    }
+    .dispatch-compteur-dot {
+      width: 10px; height: 10px; border-radius: 50%;
+      background: var(--or);
+      box-shadow: 0 0 8px var(--or-glow);
+      animation: pulseGlow 2s ease infinite;
+    }
+
+    .dispatch-section-title {
+      padding: 1.5rem 2rem .5rem;
+      font-size: 1.1rem;
+      color: var(--gris-clair);
+      font-weight: 600;
+    }
+
+    .dispatch-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1.2rem; padding: 1rem 2rem 2rem;
+    }
+
+    .dispatch-fiche {
+      background: var(--surface);
+      border: 1px solid var(--bordure);
+      border-radius: var(--rayon);
+      padding: 1.5rem;
+      transition: border-color var(--transition), box-shadow var(--transition);
+    }
+    .dispatch-fiche:hover { border-color: var(--bordure-hover); box-shadow: var(--ombre); }
+
+    .dispatch-fiche-header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: .8rem;
+    }
+    .dispatch-fiche h3 { font-size: 1.4rem; color: var(--or); }
+    .dispatch-fiche-mode {
+      background: rgba(255,255,255,.05);
+      border: 1px solid var(--bordure);
+      border-radius: 999px;
+      padding: .25rem .7rem;
+      font-size: .78rem; font-weight: 600;
+      color: var(--gris-clair);
+    }
+
+    .dispatch-fiche-adresse {
+      color: var(--gris); font-size: .9rem;
+      margin-bottom: 1rem;
+      padding: .6rem .8rem;
+      background: rgba(255,255,255,.02);
+      border: 1px solid var(--bordure);
+      border-radius: 10px;
+    }
+
+    .dispatch-livreur-select {
+      margin-bottom: 1rem;
+    }
+    .dispatch-livreur-select label {
+      font-weight: 600; font-size: .9rem; color: var(--gris-clair);
+      display: block; margin-bottom: .4rem;
+    }
+    .dispatch-livreur-select select {
+      width: 100%;
+      background: var(--charbon);
+      border: 1px solid var(--bordure); color: var(--blanc);
+      border-radius: 12px; padding: .9rem 1rem;
+      font-family: var(--font-corps); font-size: 1rem;
+      transition: border-color var(--transition);
+    }
+    .dispatch-livreur-select select:focus {
+      outline: none; border-color: var(--or);
+      box-shadow: 0 0 0 3px var(--or-glow);
+    }
+
+    .dispatch-fiche .btn {
+      width: 100%; padding: 1rem; font-size: 1rem;
+    }
+
+    .dispatch-empty {
+      text-align: center;
+      padding: 4rem 2rem;
+      color: var(--gris);
+    }
+    .dispatch-empty-icone { font-size: 3rem; margin-bottom: 1rem; opacity: .5; }
+
+    @media (max-width: 768px) {
+      .dispatch-grid { grid-template-columns: 1fr; padding: 1rem; }
+      .dispatch-header { padding: .8rem 1rem; }
+    }
+  </style>
 </head>
 <body class="fade-in">
-  <header class="kds-header">
-    <h1 class="logo-mark" style="font-size:1.5rem;">Dispatch — Livreurs</h1>
-    <nav style="display:flex;gap:1rem;">
+  <header class="dispatch-header">
+    <h1 class="logo-mark" style="font-size:1.4rem;">Dispatch — <span>Livreurs</span></h1>
+    <nav>
+      <div class="dispatch-compteur">
+        <span class="dispatch-compteur-dot"></span>
+        <span id="dispatch-count">0 prêtes</span>
+      </div>
       <a href="kds.html" class="btn btn-ghost">KDS</a>
-      <button class="btn btn-ghost" id="deconnexion">Deconnexion</button>
+      <button class="btn btn-ghost" id="deconnexion">Déconnexion</button>
     </nav>
   </header>
 
-  <h2 class="titre" style="padding:1.2rem 1.5rem 0;">Commandes pretes a livrer</h2>
-  <div class="kds-grid" id="dispatch-grid"></div>
+  <p class="dispatch-section-title">Commandes prêtes à attribuer</p>
+  <div class="dispatch-grid" id="dispatch-grid"></div>
 
   <script src="../js/core.js"></script>
   <script src="../js/staff.js"></script>
